@@ -1,13 +1,12 @@
 // ignore_for_file: prefer_const_constructors
+import 'package:book_bazar/Models/book_model.dart';
 import 'package:flutter/material.dart';
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unrelated_type_equality_checks, prefer_final_fields, prefer_typing_uninitialized_variables, must_be_immutable, unused_local_variable
-
-// import 'dart:convert';
-import 'dart:developer';
-import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 
 import '../Constants/colors.dart';
+import '../Network/api_calls.dart';
+import '../Widgets/bottom_navbar.dart';
+import '../Widgets/floating_action_button.dart';
+import 'Books/add_books.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -49,77 +48,42 @@ class _HomePageState extends State<HomePage> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              Text(
-                'lorem',
-                style: const TextStyle(),
-              ),
+              FutureBuilder(
+                  future: getBookFromDataBase(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      var data = snapshot.data;
+                      List<BookModel> bookdata = data as List<BookModel>;
+                      if (data != null) {
+                        return ListView.builder(
+                          itemCount: 20,
+                          itemBuilder: (ctx, index) => Text(
+                            "data[index].title",
+                            style: const TextStyle(),
+                          ),
+                        );
+                      }
+                    } else if (snapshot.connectionState ==
+                        ConnectionState.waiting) {
+                      return Center(child: CircularProgressIndicator());
+                    }
+                    return Text(
+                      'error',
+                      style: const TextStyle(),
+                    );
+                  }),
             ],
           ),
         ),
       ),
+      drawer: Drawer(),
       // drawer: MyDrawer2(),
       // floatingActionButton: floatingactionbutton(context),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       // bottomNavigationBar: navbar(context),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Color(0xff383838),
-        child: const Icon(
-          Icons.wifi_tethering_error_rounded_rounded,
-          color: Colors.white,
-        ),
-        onPressed: () {},
-      ),
+      floatingActionButton: FloatingAddButton(),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: Container(
-        color: Colors.white.withOpacity(0.1),
-        child: Padding(
-          padding: const EdgeInsets.only(bottom: 10, left: 18, right: 18),
-          child: Container(
-            height: 50,
-            width: 500,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                IconButton(
-                  onPressed: () {},
-                  icon: const Icon(
-                    Icons.compass_calibration_rounded,
-                    size: 20,
-                    color: Colors.white,
-                  ),
-                ),
-                IconButton(
-                  onPressed: () {},
-                  icon: const Icon(
-                    Icons.chair,
-                    size: 20,
-                    color: Colors.white,
-                  ),
-                ),
-                IconButton(
-                  onPressed: () {},
-                  icon: const Icon(
-                    Icons.bookmark_add_outlined,
-                    size: 20,
-                    color: Colors.white,
-                  ),
-                ),
-                IconButton(
-                  onPressed: () {},
-                  icon: const Icon(
-                    Icons.surround_sound,
-                    size: 20,
-                    color: Colors.white,
-                  ),
-                ),
-              ],
-            ),
-            decoration: BoxDecoration(
-                gradient: linearGradient(),
-                borderRadius: BorderRadius.circular(20)),
-          ),
-        ),
-      ),
+      bottomNavigationBar: BottomNavBar(),
     );
   }
 

@@ -4,15 +4,6 @@ class MyColors {
   static const primaryColor = Color.fromRGBO(147, 97, 255, 1);
 }
 
-class NavIcons {
-  static final iconList = <IconData>[
-    Icons.home,
-    Icons.chat,
-    Icons.location_off,
-    Icons.person
-  ];
-}
-
 LinearGradient linearGradient() {
   return const LinearGradient(
       begin: Alignment.topCenter,

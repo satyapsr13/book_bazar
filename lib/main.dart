@@ -2,7 +2,6 @@
 //https://picsum.photos/200/300   //  ⌘ ñ
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
 import 'Screens/Auth/login_screen.dart';
 import 'Screens/home_screen.dart';
 
@@ -16,8 +15,7 @@ void main() {
 // command to generate keyproperties.jks
 // keytool -genkey -v -keystore ~/mykey.jks -storetype JKS -keyalg RSA -keysize 2048 -validity 10000 -alias androiddebugkey
 
-
- class MyApp extends StatelessWidget {
+class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
   @override
