@@ -48,6 +48,9 @@ class _LoginPageState extends State<LoginPage> {
                           fontSize: mediaquery.width * 0.05,
                           color: Colors.white,
                         )),
+
+
+                        
                     Text(' Google',
                         style: GoogleFonts.sacramento(
                           fontSize: mediaquery.width * 0.07,
