@@ -1,7 +1,11 @@
 // ignore_for_file: prefer_const_constructors
 //https://picsum.photos/200/300   //  ⌘ ñ
+import 'package:book_bazar/Provider/book_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'Provider/user_provider.dart';
 import 'Screens/Auth/login_screen.dart';
 import 'Screens/home_screen.dart';
 
@@ -10,21 +14,54 @@ void main() {
     statusBarColor: Colors.transparent,
     systemNavigationBarColor: Colors.transparent,
   ));
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 // command to generate keyproperties.jks
 // keytool -genkey -v -keystore ~/mykey.jks -storetype JKS -keyalg RSA -keysize 2048 -validity 10000 -alias androiddebugkey
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+class MyApp extends StatefulWidget {
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  // const MyApp({Key? key}) : super(key: key);
+  Widget page = LoginPage();
+  void getUserDetails() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      if (prefs.getString('name') != null) {
+        setState(() {
+          page = HomePage();
+        });
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    getUserDetails();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'homepage',
-      debugShowCheckedModeBanner: false,
-      home: LoginPage(),
-      //routes: {  targetscreen.routeName:(ctx)=>const targetscreen(),},
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<BookProvider>(
+          create: (_) => BookProvider(),
+        ),
+        ChangeNotifierProvider<UserProvider>(
+          create: (_) => UserProvider(),
+        ),
+      ],
+      child: MaterialApp(
+        title: 'homepage',
+        debugShowCheckedModeBanner: false,
+        home: HomePage(),
+        //routes: {  targetscreen.routeName:(ctx)=>const targetscreen(),},
+      ),
     );
   }
 }

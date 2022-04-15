@@ -322,7 +322,9 @@ class _BookSellingFormScreenState extends State<BookSellingFormScreen> {
                               // desc: 'Dialog description here.............',
                               // btnCancelOnPress: () {},
                               btnOkText: "OK",
-                              btnOkOnPress: () {},
+                              btnOkOnPress: () {
+                                Navigator.pop(context);
+                              },
                             )..show();
                           } else {
                             // errorDailogue(context);

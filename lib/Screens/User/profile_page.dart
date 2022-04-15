@@ -2,6 +2,7 @@
 import 'dart:math';
 
 import 'package:extended_image/extended_image.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -75,19 +76,20 @@ class _ProfilePageState extends State<ProfilePage> {
     ;
   }
 
+  int color = 45;
   Center showImage(Size mediaquery) {
     return Center(
       child: Stack(
         children: [
           Transform.rotate(
-            angle: -0.1,
+            angle: -0.2,
             child: SizedBox(
               width: mediaquery.width * 0.85,
               height: mediaquery.height * 0.35,
               child: ColorFiltered(
                 colorFilter: ColorFilter.mode(
-                    Color.fromRGBO(Random().nextInt(256), Random().nextInt(256),
-                        Random().nextInt(254), 1),
+                    Color.fromRGBO(
+                        Random().nextInt(256), color, Random().nextInt(254), 1),
                     blendMode),
                 child: ExtendedImage.network(
                   image ??
@@ -103,17 +105,40 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
           Transform.rotate(
             angle: 0.1,
-            child: SizedBox(
-              width: mediaquery.width * 0.85,
-              height: mediaquery.height * 0.35,
-              child: ExtendedImage.network(
-                image ??
-                    "https://th.bing.com/th/id/OIP.cUUf67YH-hex_XPKWlnZ1QHaLF?w=125&h=187&c=7&r=0&o=5&dpr=1.65&pid=1.7",
-                fit: BoxFit.cover,
-                cache: true,
-                // border: Border.all(color: Colors.red, width: 1.0),
-                borderRadius: BorderRadius.all(Radius.circular(30.0)),
-                //cancelToken: cancellationToken,
+            child: Draggable(
+              onDragUpdate: (_) {
+                setState(() {
+                  color = (color + Random().nextInt(25600)) % 256;
+                });
+              },
+              onDragCompleted: () {
+                setState(() {});
+              },
+              feedback: SizedBox(
+                width: mediaquery.width * 0.85,
+                height: mediaquery.height * 0.35,
+                child: ExtendedImage.network(
+                  image ??
+                      "https://th.bing.com/th/id/OIP.cUUf67YH-hex_XPKWlnZ1QHaLF?w=125&h=187&c=7&r=0&o=5&dpr=1.65&pid=1.7",
+                  fit: BoxFit.cover,
+                  cache: true,
+                  // border: Border.all(color: Colors.red, width: 1.0),
+                  borderRadius: BorderRadius.all(Radius.circular(30.0)),
+                  //cancelToken: cancellationToken,
+                ),
+              ),
+              child: SizedBox(
+                width: mediaquery.width * 0.85,
+                height: mediaquery.height * 0.35,
+                child: ExtendedImage.network(
+                  image ??
+                      "https://th.bing.com/th/id/OIP.cUUf67YH-hex_XPKWlnZ1QHaLF?w=125&h=187&c=7&r=0&o=5&dpr=1.65&pid=1.7",
+                  fit: BoxFit.cover,
+                  cache: true,
+                  // border: Border.all(color: Colors.red, width: 1.0),
+                  borderRadius: BorderRadius.all(Radius.circular(30.0)),
+                  //cancelToken: cancellationToken,
+                ),
               ),
             ),
           ),

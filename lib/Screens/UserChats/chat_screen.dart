@@ -1,14 +1,15 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
- import 'package:book_bazar/Screens/User/profile_page.dart';
+import 'package:book_bazar/Screens/User/profile_page.dart';
 import 'package:book_bazar/Widgets/floating_action_button.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../../Constants/colors.dart';
 import '../home_screen.dart';
 
 class UserChatScreen extends StatelessWidget {
   const UserChatScreen({Key? key}) : super(key: key);
-   @override
+  @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 3,
@@ -21,7 +22,13 @@ class UserChatScreen extends StatelessWidget {
           ),
           // ignore: prefer_const_constructors
           bottom: TabBar(
-            labelColor: Colors.black,
+            labelColor: Colors.white,
+            labelStyle: GoogleFonts.sacramento(
+                fontSize: 25, fontWeight: FontWeight.bold),
+            unselectedLabelStyle: TextStyle(
+              fontSize: 15,
+              color: Colors.white.withOpacity(0.5),
+            ),
             indicatorColor: Colors.white,
             // ignore: prefer_const_literals_to_create_immutables
             tabs: [

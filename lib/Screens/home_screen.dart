@@ -1,11 +1,18 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 import 'package:book_bazar/Models/book_model.dart';
+import 'package:book_bazar/Provider/book_provider.dart';
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../Constants/colors.dart';
+import '../Constants/variables.dart';
 import '../Network/api_calls.dart';
 import '../Widgets/bottom_navbar.dart';
+import '../Widgets/drawer.dart';
 import '../Widgets/floating_action_button.dart';
+import '../Widgets/home_page_book.dart';
 import 'Books/add_books.dart';
 
 class HomePage extends StatefulWidget {
@@ -20,6 +27,13 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    Provider.of<BookProvider>(context, listen: false).getBookFromDataBase();
+  }
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
   }
 
   @override
@@ -41,6 +55,15 @@ class _HomePageState extends State<HomePage> {
               color: Colors.white,
             ),
           ),
+          IconButton(
+            onPressed: () => Provider.of<BookProvider>(context, listen: false)
+                .getBookFromDataBase(),
+            icon: const Icon(
+              Icons.refresh_outlined,
+              size: 20,
+              color: Colors.white,
+            ),
+          ),
         ],
       ),
       backgroundColor: Colors.white,
@@ -48,35 +71,68 @@ class _HomePageState extends State<HomePage> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              FutureBuilder(
-                  future: getBookFromDataBase(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.done) {
-                      var data = snapshot.data;
-                      List<BookModel> bookdata = data as List<BookModel>;
-                      if (data != null) {
-                        return ListView.builder(
-                          itemCount: 20,
-                          itemBuilder: (ctx, index) => Text(
-                            "data[index].title",
-                            style: const TextStyle(),
-                          ),
-                        );
-                      }
-                    } else if (snapshot.connectionState ==
-                        ConnectionState.waiting) {
-                      return Center(child: CircularProgressIndicator());
-                    }
-                    return Text(
-                      'error',
-                      style: const TextStyle(),
-                    );
-                  }),
+              SizedBox(height: 20),
+              SizedBox(
+                height: mediaquery.height * 0.2,
+                child: CarouselSlider(
+                  items: carouselItems,
+                  options: CarouselOptions(
+                    viewportFraction: 0.98,
+                    enlargeCenterPage: true,
+                    autoPlay: true,
+                  ),
+                ),
+              ),
+              SizedBox(height: 20),
+              SizedBox(
+                height: 50,
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  children: intrests,
+                ),
+              ),
+              SizedBox(height: 5),
+              Consumer<BookProvider>(builder: (context, data, _) {
+                return data.loading == Loading.waiting
+                    ? Center(child: CircularProgressIndicator())
+                    : data.loading == Loading.error
+                        ? Column(
+                            children: [
+                              Text(
+                                'error',
+                                style: const TextStyle(),
+                              ),
+                              ElevatedButton(
+                                onPressed: () {
+                                  Provider.of<BookProvider>(context,
+                                          listen: false)
+                                      .getBookFromDataBase();
+                                },
+                                child: Text(
+                                  'Refresh',
+                                  style: const TextStyle(),
+                                ),
+                              )
+                            ],
+                          )
+                        : SizedBox(
+                            // height: (mediaquery.height * 2) - 150,
+                            child: ListView.builder(
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount: data.bookdata.length,
+                                itemBuilder: (ctx, index) {
+                                  return HomePageWidget(
+                                    model: data.bookdata[index],
+                                  );
+                                }),
+                          );
+              })
             ],
           ),
         ),
       ),
-      drawer: Drawer(),
+      drawer: MyDrawer(),
       // drawer: MyDrawer2(),
       // floatingActionButton: floatingactionbutton(context),
       // bottomNavigationBar: navbar(context),
