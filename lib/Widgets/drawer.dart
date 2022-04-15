@@ -33,7 +33,7 @@ class _MyDrawer2State extends State<MyDrawer> {
             child: Row(
               children: [
                 ExtendedImage.network(
-                  Provider.of<UserProvider>(context, listen: false).image,
+                  Provider.of<UserProvider>(context).image,
                   fit: BoxFit.cover,
                   cache: true,
                   height: 50,
@@ -45,15 +45,12 @@ class _MyDrawer2State extends State<MyDrawer> {
                 Spacer(
                   flex: 2,
                 ),
-                Container(
-                  // width: 175,
-                  child: Text(
-                    Provider.of<UserProvider>(context, listen: false).email,
-                    overflow: TextOverflow.fade,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 14,
-                    ),
+                Text(
+                  Provider.of<UserProvider>(context).email,
+                  overflow: TextOverflow.fade,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 14,
                   ),
                 ),
                 Spacer(
