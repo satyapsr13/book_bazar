@@ -40,6 +40,8 @@ class _MyDrawer2State extends State<MyDrawer> {
                   width: 50,
                   borderRadius: BorderRadius.all(Radius.circular(30.0)),
                 ),
+
+                
                 Spacer(
                   flex: 2,
                 ),
