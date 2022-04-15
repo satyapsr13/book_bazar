@@ -38,9 +38,7 @@ class _MyDrawer2State extends State<MyDrawer> {
                   cache: true,
                   height: 50,
                   width: 50,
-                  // border: Border.all(color: Colors.red, width: 1.0),
                   borderRadius: BorderRadius.all(Radius.circular(30.0)),
-                  //cancelToken: cancellationToken,
                 ),
                 Spacer(
                   flex: 2,
